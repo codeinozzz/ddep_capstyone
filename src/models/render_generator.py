@@ -3,6 +3,7 @@ from diffusers import StableDiffusionPipeline
 from PIL import Image
 import os
 
+
 class RenderGenerator:
     def __init__(self, model_id="runwayml/stable-diffusion-v1-5", device=None):
         if device is None:
@@ -15,7 +16,7 @@ class RenderGenerator:
         self.pipe = StableDiffusionPipeline.from_pretrained(
             model_id,
             torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
-            safety_checker=None
+            safety_checker=None,
         )
         self.pipe = self.pipe.to(self.device)
 
@@ -33,7 +34,7 @@ class RenderGenerator:
             "modern": "modern contemporary architecture, sleek materials, glass and steel, clean geometric design, professional lighting",
             "mediterranean": "mediterranean architecture, stucco walls, terracotta accents, warm earth tones, soft textures, natural lighting",
             "scandinavian": "scandinavian design, light wood, white walls, cozy atmosphere, natural materials, bright airy space",
-            "contemporary_luxury": "luxury contemporary design, marble surfaces, premium materials, elegant sophisticated, ambient lighting"
+            "contemporary_luxury": "luxury contemporary design, marble surfaces, premium materials, elegant sophisticated, ambient lighting",
         }
 
         space_prompts = {
@@ -44,7 +45,7 @@ class RenderGenerator:
             "bedroom": "bedroom interior, sleeping area, peaceful atmosphere, residential design",
             "office": "office interior, workspace design, professional environment, commercial interior",
             "restaurant": "restaurant interior, dining space, hospitality design, commercial photography",
-            "store": "retail store interior, commercial space, display area, shop design"
+            "store": "retail store interior, commercial space, display area, shop design",
         }
 
         base_prompt = f"{style_prompts.get(style, 'architectural design')}, {space_prompts.get(space, 'interior space')}"
@@ -59,13 +60,23 @@ class RenderGenerator:
 
         return base_prompt, negative_prompt
 
-    def generate_render(self, style, space, specification, colors=None,
-                       output_dir="outputs/renders", filename=None,
-                       num_inference_steps=50, guidance_scale=7.5):
+    def generate_render(
+        self,
+        style,
+        space,
+        specification,
+        colors=None,
+        output_dir="outputs/renders",
+        filename=None,
+        num_inference_steps=50,
+        guidance_scale=7.5,
+    ):
 
         os.makedirs(output_dir, exist_ok=True)
 
-        prompt, negative_prompt = self._build_prompt(style, space, specification, colors)
+        prompt, negative_prompt = self._build_prompt(
+            style, space, specification, colors
+        )
 
         print(f"\nGenerating render: {style} {space}")
         print(f"Prompt: {prompt[:100]}...")
@@ -77,7 +88,7 @@ class RenderGenerator:
                 num_inference_steps=num_inference_steps,
                 guidance_scale=guidance_scale,
                 height=768,
-                width=768
+                width=768,
             ).images[0]
 
         if filename is None:
@@ -91,9 +102,11 @@ class RenderGenerator:
         return image, output_path
 
     def generate_from_spec_file(self, spec_file_path, style, space, colors=None):
-        with open(spec_file_path, 'r', encoding='utf-8') as f:
+        with open(spec_file_path, "r", encoding="utf-8") as f:
             specification = f.read()
 
-        filename = os.path.basename(spec_file_path).replace('.txt', '_render.png')
+        filename = os.path.basename(spec_file_path).replace(".txt", "_render.png")
 
-        return self.generate_render(style, space, specification, colors, filename=filename)
+        return self.generate_render(
+            style, space, specification, colors, filename=filename
+        )

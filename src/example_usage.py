@@ -1,6 +1,7 @@
 from models.design_generator import DesignGenerator
 from models.render_generator import RenderGenerator
 
+
 def example_text_only():
     print("Example 1: Specification generation only")
     print("-" * 60)
@@ -8,14 +9,12 @@ def example_text_only():
     generator = DesignGenerator()
 
     specification = generator.generate_specification(
-        style="rustic",
-        space="facade",
-        size="medium",
-        colors=["grey", "beige"]
+        style="rustic", space="facade", size="medium", colors=["grey", "beige"]
     )
 
     print(specification)
     print("\n")
+
 
 def example_complete_pipeline():
     print("Example 2: Complete pipeline (specification + render)")
@@ -28,7 +27,7 @@ def example_complete_pipeline():
         style="minimalist",
         space="kitchen",
         size="medium",
-        colors=["white", "light grey"]
+        colors=["white", "light grey"],
     )
 
     print("Specification generated")
@@ -40,11 +39,12 @@ def example_complete_pipeline():
         specification=specification,
         colors=["white", "light grey"],
         filename="example_minimalist_kitchen.png",
-        num_inference_steps=30
+        num_inference_steps=30,
     )
 
     print(f"Render saved at: {path}")
     print(f"Resolution: {image.size}\n")
+
 
 def example_multiple_designs():
     print("Example 3: Generate multiple designs")
@@ -55,7 +55,7 @@ def example_multiple_designs():
 
     designs = [
         ("brutalism", "living_room", "small", ["grey"]),
-        ("mediterranean", "facade", "medium", ["white", "terracotta"])
+        ("mediterranean", "facade", "medium", ["white", "terracotta"]),
     ]
 
     for style, space, size, colors in designs:
@@ -64,12 +64,16 @@ def example_multiple_designs():
         spec = design_gen.generate_specification(style, space, size, colors)
 
         image, path = render_gen.generate_render(
-            style, space, spec, colors,
+            style,
+            space,
+            spec,
+            colors,
             filename=f"{style}_{space}_example.png",
-            num_inference_steps=25
+            num_inference_steps=25,
         )
 
         print(f"Completed: {path}")
+
 
 if __name__ == "__main__":
     import sys

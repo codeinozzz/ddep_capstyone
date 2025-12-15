@@ -2,23 +2,19 @@ import json
 import os
 from typing import List, Dict, Optional
 
+
 class DesignGenerator:
     def __init__(self, catalog_path: str = None):
         if catalog_path is None:
             catalog_path = os.path.join(
-                os.path.dirname(__file__),
-                "../data/materials_catalog.json"
+                os.path.dirname(__file__), "../data/materials_catalog.json"
             )
 
-        with open(catalog_path, 'r') as f:
+        with open(catalog_path, "r") as f:
             self.catalog = json.load(f)
 
     def generate_specification(
-        self,
-        style: str,
-        space: str,
-        size: str,
-        colors: List[str]
+        self, style: str, space: str, size: str, colors: List[str]
     ) -> str:
 
         style_data = self.catalog["styles"].get(style)
@@ -36,30 +32,25 @@ class DesignGenerator:
             size_data=size_data,
             materials=materials,
             space_name=space,
-            size_name=size
+            size_name=size,
         )
 
         return spec
 
     def _select_materials(
-        self,
-        style_data: Dict,
-        space_data: Dict,
-        colors: List[str]
+        self, style_data: Dict, space_data: Dict, colors: List[str]
     ) -> List[Dict]:
 
         available_materials = style_data["materials"]
         space_type = space_data["type"].split("_")[0]
 
         filtered_materials = [
-            m for m in available_materials
-            if space_type in m["application"]
+            m for m in available_materials if space_type in m["application"]
         ]
 
         if not filtered_materials:
             filtered_materials = [
-                m for m in available_materials
-                if "interior" in m["application"]
+                m for m in available_materials if "interior" in m["application"]
             ]
 
         if not filtered_materials:
@@ -68,14 +59,20 @@ class DesignGenerator:
         if colors:
             color_matched = []
             for material in filtered_materials:
-                if any(color.lower() in " ".join(material["colors"]).lower()
-                       for color in colors):
+                if any(
+                    color.lower() in " ".join(material["colors"]).lower()
+                    for color in colors
+                ):
                     color_matched.append(material)
 
             if color_matched:
                 filtered_materials = color_matched
 
-        return filtered_materials[:3] if len(filtered_materials) >= 3 else filtered_materials
+        return (
+            filtered_materials[:3]
+            if len(filtered_materials) >= 3
+            else filtered_materials
+        )
 
     def _build_specification(
         self,
@@ -84,7 +81,7 @@ class DesignGenerator:
         size_data: Dict,
         materials: List[Dict],
         space_name: str,
-        size_name: str
+        size_name: str,
     ) -> str:
 
         space_display = space_data["type"].replace("_", " ").title()
@@ -157,7 +154,7 @@ class DesignGenerator:
             "ceramic": "Regular cleaning, grout maintenance",
             "porcelain": "Minimal maintenance, easy cleaning",
             "glass": "Regular cleaning, check seals",
-            "stucco": "Touch-up as needed, wash annually"
+            "stucco": "Touch-up as needed, wash annually",
         }
 
         notes = ""
@@ -173,5 +170,5 @@ class DesignGenerator:
         return {
             "styles": list(self.catalog["styles"].keys()),
             "spaces": list(self.catalog["spaces"].keys()),
-            "sizes": list(self.catalog["sizes"].keys())
+            "sizes": list(self.catalog["sizes"].keys()),
         }

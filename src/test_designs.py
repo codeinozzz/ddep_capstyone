@@ -1,8 +1,10 @@
 import os
 from models.design_generator import DesignGenerator
 
+
 def print_separator():
     print("\n" + "=" * 80 + "\n")
+
 
 def run_tests():
     generator = DesignGenerator()
@@ -13,57 +15,57 @@ def run_tests():
             "style": "rustic",
             "space": "facade",
             "size": "medium",
-            "colors": ["grey", "beige"]
+            "colors": ["grey", "beige"],
         },
         {
             "name": "Brutalist Living Room - Small",
             "style": "brutalism",
             "space": "living_room",
             "size": "small",
-            "colors": ["grey"]
+            "colors": ["grey"],
         },
         {
             "name": "Minimalist Kitchen - Medium",
             "style": "minimalist",
             "space": "kitchen",
             "size": "medium",
-            "colors": ["white", "light"]
+            "colors": ["white", "light"],
         },
         {
             "name": "Industrial Office - Large",
             "style": "industrial",
             "space": "office",
             "size": "large",
-            "colors": ["grey", "black"]
+            "colors": ["grey", "black"],
         },
         {
             "name": "Mediterranean Facade - Medium",
             "style": "mediterranean",
             "space": "facade",
             "size": "medium",
-            "colors": ["white", "terracotta"]
+            "colors": ["white", "terracotta"],
         },
         {
             "name": "Scandinavian Bedroom - Small",
             "style": "scandinavian",
             "space": "bedroom",
             "size": "small",
-            "colors": ["white", "light"]
+            "colors": ["white", "light"],
         },
         {
             "name": "Contemporary Luxury Bathroom - Medium",
             "style": "contemporary_luxury",
             "space": "bathroom",
             "size": "medium",
-            "colors": ["white", "gold"]
+            "colors": ["white", "gold"],
         },
         {
             "name": "Modern Restaurant - Large",
             "style": "modern",
             "space": "restaurant",
             "size": "large",
-            "colors": ["grey", "white"]
-        }
+            "colors": ["grey", "white"],
+        },
     ]
 
     print("CLADDING DESIGNER - TEST SUITE")
@@ -78,7 +80,7 @@ def run_tests():
             style=test["style"],
             space=test["space"],
             size=test["size"],
-            colors=test["colors"]
+            colors=test["colors"],
         )
 
         print(specification)
@@ -88,12 +90,12 @@ def run_tests():
             os.path.dirname(__file__),
             "outputs",
             "specifications",
-            f"{test['style']}_{test['space']}_{test['size']}.txt"
+            f"{test['style']}_{test['space']}_{test['size']}.txt",
         )
 
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-        with open(output_path, 'w') as f:
+        with open(output_path, "w") as f:
             f.write(specification)
 
         print(f"Saved to: {output_path}")
@@ -107,6 +109,7 @@ def run_tests():
     print(f"Styles: {', '.join(options['styles'])}")
     print(f"Spaces: {', '.join(options['spaces'])}")
     print(f"Sizes: {', '.join(options['sizes'])}")
+
 
 if __name__ == "__main__":
     run_tests()
